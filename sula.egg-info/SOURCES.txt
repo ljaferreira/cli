@@ -1,7 +1,0 @@
-setup.py
-sula.egg-info/PKG-INFO
-sula.egg-info/SOURCES.txt
-sula.egg-info/dependency_links.txt
-sula.egg-info/entry_points.txt
-sula.egg-info/requires.txt
-sula.egg-info/top_level.txt
