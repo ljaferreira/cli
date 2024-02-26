@@ -1,0 +1,4 @@
+click == 8.1.7
+google-cloud-workstations == 0.5.4
+psutil == 5.9.8
+google-auth == 2.28.1
