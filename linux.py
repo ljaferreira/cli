@@ -5,6 +5,26 @@ class Linux:
     def __init__(self):
         pass
 
+    def login(self):
+        import subprocess
+
+        print("check if gcloud is logged in")
+        if subprocess.run(["gcloud", "config", "get-value", "account"], stdout=subprocess.PIPE).stdout:
+            click.echo(
+                click.style(
+                    "you are logged in",
+                    fg="green",
+                )
+            )
+        else:
+            subprocess.run(["gcloud", "auth", "login"])
+            click.echo(
+                click.style(
+                    "login successfully",
+                    fg="green",
+                )
+            )
+
     def start(self, username):
         import os
         import subprocess
@@ -21,9 +41,8 @@ class Linux:
         click.echo('killing older processes')
         kill_older_process(4022)
 
-        print("check if gcloud is logged in")
-        if not subprocess.run(["gcloud", "config", "get-value", "account"], stdout=subprocess.PIPE).stdout:
-            subprocess.run(["gcloud", "auth", "login"])
+        self.login()
+
         try:
             result = subprocess.run(
                 ["gcloud", "workstations", "start", f"ws-{username}", "--project=sas-eng-suptengb-sbx",

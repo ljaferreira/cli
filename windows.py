@@ -5,12 +5,40 @@ class Windows:
     def __init__(self):
         pass
 
+    def login(self):
+        import os
+        from subprocess import Popen
+        from subprocess import PIPE
+
+
+        click.echo("check if gcloud is logged in")
+        command = 'gcloud config get-value account'
+        pipe = Popen(command, shell=True, stdout=PIPE, stderr=PIPE)
+
+        line = pipe.stdout.readline()
+
+        if line:
+            click.echo(
+                click.style(
+                    "you are logged in",
+                    fg="green",
+                )
+            )
+        else:
+            command = 'gcloud auth login'
+            os.system(command)
+            click.echo(
+                click.style(
+                    "login successfully",
+                    fg="green",
+                )
+            )
+
     def start(self, username):
         import os
         import time
         from utils import kill_older_process
         from subprocess import Popen
-        from subprocess import PIPE
         import socket as sock
 
         click.echo("check trust host is configured")
@@ -24,15 +52,7 @@ class Windows:
         click.echo('killing older processes')
         kill_older_process(4022)
 
-        click.echo("check if gcloud is logged in")
-        command = 'gcloud config get-value account'
-        pipe = Popen(command, shell=True, stdout=PIPE, stderr=PIPE)
-
-        line = pipe.stdout.readline()
-
-        if not line:
-            command = 'gcloud auth login'
-            os.system(command)
+        self.login()
 
         try:
             click.echo(

@@ -1,10 +1,6 @@
-import platform
-
 import click
-import re
 
-from linux import Linux
-from windows import Windows
+from utils import validate_username,verify_platform
 
 
 @click.group()
@@ -12,48 +8,29 @@ def cli():
     pass
 
 
+@cli.command()
+def login():
+    os = verify_platform()
+    os.login()
+
+
 @cli.group()
 def workspace():
     pass
 
-
 @workspace.command()
 @click.option('--username', prompt='Username ')
 def start(username):
-    global os
-    if not re.match(r"\w\d{6}", username):
-        click.echo(
-            click.style(
-                f"😞 Username invalid!",
-                fg="red",
-            )
-        )
-        return
-    os = Windows()
-
-    if platform.system() == 'Linux':
-        os = Linux()
-
+    validate_username(username)
+    os = verify_platform()
     os.start(username)
 
 
 @workspace.command()
 @click.option('--username', prompt='Username ')
 def stop(username):
-    global os
-    if not re.match(r"\w\d{6}", username):
-        click.echo(
-            click.style(
-                f"😞 Username invalid!",
-                fg="red",
-            )
-        )
-        return
-    os = Windows()
-
-    if platform.system() == 'Linux':
-        os = Linux()
-
+    validate_username(username)
+    os = verify_platform()
     os.stop(username)
 
 

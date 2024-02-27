@@ -1,4 +1,9 @@
 import psutil
+import re
+import click
+from linux import Linux
+from windows import Windows
+import platform
 
 
 def get_pid(port):
@@ -18,3 +23,23 @@ def kill_older_process(port: int):
     if pid is None or pid > 0:
         p = psutil.Process(pid)
         p.terminate()
+
+
+def validate_username(username):
+    if not re.match(r"\w\d{6}", username):
+        click.echo(
+            click.style(
+                f"😞 Username invalid!",
+                fg="red",
+            )
+        )
+        return False
+    return True
+
+
+def verify_platform():
+    os = Windows()
+
+    if platform.system() == 'Linux':
+        os = Linux()
+    return os
